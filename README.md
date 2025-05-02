@@ -31,13 +31,14 @@ Currently, the application is only implemented at a rudimentary level and focuse
 
 
 ## FEATURES
-| **Feature**          | **Mode**   | **Description**                                                                                         | **Note**                                                                                      |
-|----------------------|------------|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Add a new Movie      | `ADMIN`    | The admin can add a new movie to the movie repository                                                  |                                                                                               |
-| Add a new Room       | `ADMIN`    | The admin can add a new room along with its seat map                                                   |                                                                                               |
-| Add a new Showtime   | `ADMIN`    | The admin can add a new showtime for a movie. Tickets are auto-generated based on the showtime room   | Showtimes must not overlap (same room, same start time). **No end time check for now.**        |
-| Book Ticket          | `CUSTOMER` | The customer can browse available showtimes and book movie tickets                                     | Prevents double-booking. No two users can successfully book the same ticket simultaneously. Each ticket will be treated individually.    |
-| Cancel Ticket        | `CUSTOMER` | The customer can cancel their ticket and return it to the pool of available (unbooked) tickets         |                                                                                               |
+| **Feature**        | **Mode**   | **Description**                                                                                         | **Note**                                                                                                                       |
+|--------------------|------------|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Add a new Movie    | `ADMIN`    | The admin can add a new movie to the movie repository                                                   |                                                                                                                                |
+| Add a new Room     | `ADMIN`    | The admin can add a new room along with its seat map                                                    |                                                                                                                                |
+| Add a new Showtime | `ADMIN`    | The admin can add a new showtime for a movie. Tickets are auto-generated based on the showtime's room   | Showtimes must not overlap (same room, same start time). **No end time check for now.**                                        |
+| Book Ticket        | `CUSTOMER` | The customer can browse available showtimes and book movie tickets                                      | Prevents double-booking. No two users can successfully book the same ticket simultaneously. Each ticket is treated individually. |
+| Cancel Ticket      | `CUSTOMER` | The customer can cancel their ticket and return it to the pool of available (unbooked) tickets          |                                                                                                                                |
+
 
 ### Admin Limitations
 * No **Update** or **Delete** operations for existing data
