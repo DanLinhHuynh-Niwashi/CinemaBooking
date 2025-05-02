@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Showtimes for Movie</title>
+    <link rel="stylesheet" th:href="@{/common.css}" />
+    <link rel="stylesheet" th:href="@{/list-showtime.css}" />
+</head>
+<body>
+
+<nav class="navbar">
+    <a th:href="@{/movie/list}" class="nav-link">Movie List</a>
+    <a th:href="@{/booking/my-ticket}" class="nav-link" th:if="${mode == 'customer'}">My Tickets</a>
+    <a th:href="@{/room/list}" class="nav-link" th:if="${mode == 'admin'}">Room List</a>
+
+    <a th:href="@{/landing/logout}" style="margin-left: auto;" class="nav-link">Logout</a>
+</nav>
+
+<h1 th:text="'Showtimes for ' + ${movie.title}"></h1>
+<h5 th:text="'Duration: ' + ${movie.durationMinutes} + ' mins'"></h5>
+<h5 th:text="'Genre: ' + ${movie.genre}"></h5>
+
+<div class="container">
+    <div class="list-section">
+        <form action="#" th:action="@{/showtimes/{movieId}(movieId=${movie.movieId})}" method="post" th:object="${newShowtime}">
+            <label for="roomId">Room:</label>
+            <select id="roomId" th:field="*{roomId}" required>
+                <option th:each="room : ${rooms}" th:value="${room.roomId}" th:text="${room.roomName}">Room</option>
+            </select>
+
+            <div class="form-row" style="display: flex; justify-content: center">
+                <div style="margin-right: 20px">
+                    <label for="startTime">Start Time:</label>
+                    <input type="datetime-local" id="startTime" th:field="*{startTime}" required />
+                </div>
+                <div>
+                    <label for="ticketPrice">Ticket Price:</label>
+                    <input type="number" id="ticketPrice" th:field="*{ticketPrice}" step="1000" required />
+                </div>
+            </div>
+            <div style="text-align: center">
+                <button type="submit">Add Showtime</button>
+            </div>
+        </form>
+
+        <h2></h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Start Time</th>
+                    <th>Price</th>
+                    <th>Seats</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="showtime : ${showtimes}">
+                    <td>
+                        <span th:each="room : ${rooms}" th:if="${room.roomId} == ${showtime.roomId}" th:text="${room.roomName}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(showtime.startTime, 'E, dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${showtime.ticketPrice}"></td>
+                    <td>
+                        <a th:href="@{/showtimes/{movieId}(movieId=${movie.movieId}, showtimeId=${showtime.showTimeId})}">View</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Right Column: Seat Map -->
+    <div class="map-section">
+        <h2>Seat Map</h2>
+        <div class="seat-map">
+            <div th:if="${seats}"
+                 th:each="seat : ${seats}"
+                 th:id="'seat-' + ${seat.seatId}"
+                 th:class="'seat ' + (${seatBookingStatus[seat.seatId]} ? 'hover-booked' : 'available') + ' ' + ${seat.seatType.toString().toLowerCase()}"
+                 th:text="${seat.seatName}"
+                 th:style="'grid-row: ' + (${seat.row + 1}) + '; grid-column: ' + (${seat.column + 1}) + ';'"
+                 th:title="${seatBookingStatus[seat.seatId] ? 'Booked by phone number ' + ticketMap[seat.seatId] : ''}">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toast = document.getElementById("toast");
+        if (toast) {
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+    });
+</script>
+
+</body>
+</html>
