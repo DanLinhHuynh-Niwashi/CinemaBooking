@@ -13,7 +13,7 @@ Currently, the application is only implemented at a rudimentary level and focuse
   * MySQL
   * Thymeleaf
 
-* **Demo**: [Demo video](#)
+* **Demo**: [Demo video](https://youtu.be/pKi9V0QmNOU)
 * **Acknowledgement**: The project utilized ChatGPT to support UI arrangement and CSS, code cleaning and formatting, as well as documentation.
 
 ## TABLE OF CONTENTS
