@@ -3,7 +3,7 @@
 ### Project Information
 * **Name**: CINEMA BOOKING SYSTEM
 * **Author**: Huynh Le Dan Linh - 22520759
-* **Instrutor**: PhD. Nguyen Duy Khanh
+* **Instructor**: PhD. Nguyen Duy Khanh
 
 ### Submission
 * **GitHub Repository**: [CinemaBooking](https://github.com/DanLinhHuynh-Niwashi/CinemaBooking)
