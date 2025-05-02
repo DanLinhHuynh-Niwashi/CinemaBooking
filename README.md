@@ -31,6 +31,21 @@ Currently, the application is only implemented at a rudimentary level and focuse
 
 
 ## FEATURES
+| **Command Word**      | **Syntax**                                              | **Example**                                       |
+|-----------------------|---------------------------------------------------------|---------------------------------------------------|
+| `add-expense`         | `add-expense [DESCRIPTION] a/ AMOUNT [d/ DATE] [c/ CATEGORY]` | `add-expense a/ 17 d/ 07.09.2024 c/ FnB`             |
+| `add-income`          | `add-income [DESCRIPTION] a/ AMOUNT [d/ DATE]`              | `add-income Monthly allowance a/ 300 d/ 2024-09-19` |
+| `add-category`        | `add-category n/NAME`                                     | `add-category n/ FnB`                              |
+| `delete-transaction`  | `delete-transaction i/ INDEX`                              | `delete-transaction i/ 7`                          |
+| `delete-category`     | `delete-category i/ INDEX`                                 | `delete-category i/ 6`                             |
+| `view-category`       | `view-category`                                           | `view-category`                                   |
+| `view-expense`        | `view-expense [c/ CATEGORY] [f/ DATE] [t/ DATE]`             | `view-expense c/ food`                             |
+| `view-income`         | `view-income [f/ DATE] [t/ DATE]`                           | `view-income f/ 2024-09-16 t/ 2024-09-19`           |
+| `history`             | `history [f/ DATE] [t/ DATE]`                               | `history f/ 2024-09-16 t/ 2024-09-19`               |
+| `view-total`               | `view-total`                                                   | `view-total`                                           |
+| `help`                | `help`                                                    | `help`                                            |
+
+
 | **Feature**        | **Mode**   | **Description**                                                                                         | **Note**                                                                                                                       |
 |--------------------|------------|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | Add a new Movie    | `ADMIN`    | The admin can add a new movie to the movie repository                                                   |                                                                                                                                |
