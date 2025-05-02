@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie List</title>
+    <link rel="stylesheet" th:href="@{/common.css}" />
+</head>
+<body>
+
+<nav class="navbar">
+    <a th:href="@{/movie/list}" class="nav-link">Movie List</a>
+    <a th:href="@{/booking/my-ticket}" class="nav-link" th:if="${mode == 'customer'}">My Tickets</a>
+    <a th:href="@{/room/list}" class="nav-link" th:if="${mode == 'admin'}">Room List</a>
+
+    <a th:href="@{/landing/logout}" style="margin-left: auto;" class="nav-link">Logout</a>
+</nav>
+
+<div class="container">
+    <div class="form-section" th:if="${mode == 'admin'}">
+        <form action="#" th:action="@{/movie/list}" th:object="${movie}" method="post">
+            <label for="title">Title:</label>
+            <input type="text" id="title" th:field="*{title}" required />
+
+            <label for="durationMinutes">Duration (minutes):</label>
+            <input type="number" id="durationMinutes" th:field="*{durationMinutes}" required />
+
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" th:field="*{genre}" required />
+            <div style="text-align: center">
+                <button type="submit">Add Movie</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="list-section">
+        <h2>Movie List</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Duration</th>
+                    <th>Genre</th>
+                    <th>Showtimes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${movies}">
+                    <td th:text="${m.movieId}"></td>
+                    <td th:text="${m.title}"></td>
+                    <td th:text="${m.durationMinutes} + ' min'"></td>
+                    <td th:text="${m.genre}"></td>
+                    <td>
+                        <a th:href="@{${mode == 'customer' ? '/booking/' + m.movieId : '/showtimes/' + m.movieId}}">View Showtimes</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toast message
+        const toast = document.getElementById("toast");
+        if (toast) {
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+    });
+</script>
+</body>
+</html>
