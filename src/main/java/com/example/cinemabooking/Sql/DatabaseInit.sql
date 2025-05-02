@@ -19,7 +19,7 @@ CREATE TABLE seats (
     seatName VARCHAR(10),
     roomId INT,
     seatType VARCHAR(20),
-    `row` CHAR(1),
+    `row` INT,
     `column` INT,
     FOREIGN KEY (roomId) REFERENCES rooms(roomId)
 );
