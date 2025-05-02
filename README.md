@@ -1,35 +1,38 @@
-# CINEMA BOOKING SYSTEM
+# LAB 1 - SE334: PROGRAMMING PARADIGMS - UIT, VNUHCM
+
+### Project Information
+* **Name**: CINEMA BOOKING SYSTEM
+* **Author**: Huynh Le Dan Linh - 22520759
+* **Instrutor**: PhD. Nguyen Duy Khanh
+
+### Submission
+* **GitHub Repository**: [CinemaBooking](https://github.com/DanLinhHuynh-Niwashi/CinemaBooking)
+* **Demo**: [Demo video](https://youtu.be/pKi9V0QmNOU)
+* **Acknowledgement**: The project utilized ChatGPT to support UI arrangement and CSS, code cleaning and formatting, as well as documentation.
+
+## TABLE OF CONTENTS
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Usage Guidelines](#usage-guidelines)
+4. [Database Design](#database-design)
+5. [Testing](#testing)
+    - [TicketDAO Testing](#1-ticketdao-testing)
+    - [ShowTimeDAO Testing](#2-showtimedao-testing)
+6. [Application Screen Captures](#application-screen-captures)
+    - [Admin Mode](#1-admin-mode)
+    - [Customer Mode](#2-customer-mode)
+
+## OVERVIEW
 Cinema Booking application manages the entire movie ticket booking process in a cinema, including information about movies, showtimes, rooms, seats and tickets. ADMIN users can freely create new rooms, movies and showtimes. CUSTOMER users can book movie tickets and manage movie tickets using their phone numbers.
 
 Currently, the application is only implemented at a rudimentary level and focuses on multi-thread management to synchronize the database when multiple users book tickets at the same time.
 
-* **Author**: Huynh Le Dan Linh - 22520759
-* **Instrutor**: PhD. Nguyen Duy Khanh
-* **Subject**: SE334 - Programming Paradigms.
-* **Exercise**: TH01 - Deadline: 05.05.2025
 * **Technologies**:
 
   * Java Spring Boot
   * MySQL
   * Thymeleaf
-
-* **Demo**: [Demo video](https://youtu.be/pKi9V0QmNOU)
-* **Acknowledgement**: The project utilized ChatGPT to support UI arrangement and CSS, code cleaning and formatting, as well as documentation.
-
-## TABLE OF CONTENTS
-1. [Features](#features)
-    - [Admin Limitations](#admin-limitations)
-    - [User Authentication](#user-authentication)
-2. [Usage Guidelines](#usage-guidelines)
-3. [Database Design](#database-design)
-4. [Testing](#testing)
-    - [TicketDAO Testing](#1-ticketdao-testing)
-    - [ShowTimeDAO Testing](#2-showtimedao-testing)
-5. [Application Screen Captures](#application-screen-captures)
-    - [Admin Mode](#1-admin-mode)
-    - [Customer Mode](#2-customer-mode)
-
-
+ 
 ## FEATURES
 
 | **Feature**        | **Mode**   | **Description**                                                                                         | **Note**                                                                                                                       |
@@ -152,7 +155,7 @@ To verify that the `ShowTimeDAO` correctly handles **concurrent insertion** atte
 #### Test Scenario
 * Creates and shuffles 9 showtime objects to ensure insertion order varies.
 * Each thread attempts to insert these showtimes.
-* Final Verification Checks:
+* Final verification checks:
 
   * Total number of successful insertions should be 9 (one for each distinct time).
   * No duplicate showtimes exist in the database (i.e., no two entries have the same startTime for the same roomId).
