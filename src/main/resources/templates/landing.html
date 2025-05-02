@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Cinema Booking</title>
+  <link rel="stylesheet" th:href="@{/landing.css}" />
+</head>
+<body>
+
+<h1>Welcome to Cinema Booking</h1>
+
+<div class="container">
+  <!-- Customer Form -->
+  <form th:action="@{/landing/}" method="post">
+    <h2>Enter your phone number to proceed:</h2>
+    <input type="text" name="customerPhone" placeholder="Enter phone number" required />
+    <input type="hidden" name="mode" value="customer" />
+    <button type="submit">Continue as Customer</button>
+  </form>
+
+  <div class="line-separator">
+    <span>or</span>
+  </div>
+
+  <!-- Admin Form -->
+  <form th:action="@{/landing/}" method="post">
+    <input type="hidden" name="customerPhone" value="" />
+    <input type="hidden" name="mode" value="admin" />
+    <button type="submit">Continue as Admin</button>
+  </form>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const toast = document.getElementById("toast");
+      if (toast) {
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+  });
+</script>
+
+</body>
+</html>
