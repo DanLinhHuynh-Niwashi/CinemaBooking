@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Room</title>
+    <link rel="stylesheet" th:href="@{/common.css}" />
+    <link rel="stylesheet" th:href="@{/list-showtime.css}">
+    <link rel="stylesheet" th:href="@{/add-room.css}">
+</head>
+<body>
+<nav class="navbar">
+    <a th:href="@{/movie/list}" class="nav-link">Movie List</a>
+    <a th:href="@{/booking/my-ticket}" class="nav-link" th:if="${mode == 'customer'}">My Tickets</a>
+    <a th:href="@{/room/list}" class="nav-link" th:if="${mode == 'admin'}">Room List</a>
+
+    <a th:href="@{/landing/logout}" style="margin-left: auto;" class="nav-link">Logout</a>
+</nav>
+<h1>Add Room</h1>
+
+<div class="container">
+    <!-- Existing Rooms List -->
+    <div class="list-section">
+        <h2>Existing Rooms</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Room Map</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room : ${rooms}">
+                    <td th:text="${room.roomName}"></td>
+                    <td>
+                        <a th:href="@{/room/list?roomId={roomId}(roomId=${room.roomId})}">View Room Map</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: center">
+            <button class="open-btn" onclick="document.getElementById('roomModal').style.display='block'">Add Room</button>
+        </div>
+
+    </div>
+
+    <!-- Right Column: Seat Map -->
+    <div class="map-section">
+        <h2>Seat Map</h2>
+        <div class="seat-map">
+            <div th:if="${seats}"
+                 th:each="seat : ${seats}"
+                 th:id="'seat-' + ${seat.seatId}"
+                 th:class="'seat available ' + ${seat.seatType.toString().toLowerCase()}"
+                 th:text="${seat.seatName}"
+                 th:style="'grid-row: ' + (${seat.row + 1}) + '; grid-column: ' + (${seat.column + 1}) + ';'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for adding Room -->
+<div id="roomModal" class="modal">
+    <div class="modal-content section">
+        <span class="close" onclick="document.getElementById('roomModal').style.display='none'">&times;</span>
+
+        <form th:action="@{/room/list}" th:object="${room}" method="post" style="padding-right: 30px">
+            <input type="text" th:field="*{roomName}" placeholder="Enter room name" required />
+
+            <label>Select Seats:</label>
+            <div class="seat-map-wrapper">
+                <div class="seat-map-room">
+                    <div th:each="col : ${#numbers.sequence(0, 9)}">
+                        <div th:each="row : ${#numbers.sequence(0, 4)}" class="seat-box">
+                            <input type="checkbox"
+                                   th:id="'seat_' + ${row} + '_' + ${col}"
+                                   th:name="seats"
+                                   th:value="${row} + '_' + ${col}" />
+                            <label th:for="'seat_' + ${row} + '_' + ${col}">Seat</label>
+
+                            <select th:name="'seatTypes[' + ${row} + '_' + ${col} + ']'">
+                                <option value="STANDARD">Standard</option>
+                                <option value="VIP">VIP</option>
+                                <option value="COUPLE">Couple</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Save Room</button>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('roomModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Toast message
+        const toast = document.getElementById("toast");
+        if (toast) {
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+    });
+</script>
+
+</body>
+</html>
