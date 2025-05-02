@@ -70,6 +70,7 @@ public class RoomController {
             return "redirect:/movie/list";
         }
 
+        room.setTotalSeats(seatCoords.size());
         int roomId = roomDAO.addRoom(room);
         if (roomId < 0) {
             redirectAttributes.addFlashAttribute("message", "Failed to add room, your room name may exist.");
