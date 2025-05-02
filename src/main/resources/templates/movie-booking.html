@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking for Movie</title>
+    <link rel="stylesheet" th:href="@{/common.css}" />
+    <link rel="stylesheet" th:href="@{/list-showtime.css}" />
+</head>
+<body>
+
+<nav class="navbar">
+    <a th:href="@{/movie/list}" class="nav-link">Movie List</a>
+    <a th:href="@{/booking/my-ticket}" class="nav-link" th:if="${mode == 'customer'}">My Tickets</a>
+    <a th:href="@{/room/list}" class="nav-link" th:if="${mode == 'admin'}">Room List</a>
+
+    <a th:href="@{/landing/logout}" style="margin-left: auto;" class="nav-link">Logout</a>
+</nav>
+<h1 th:text="'Booking for ' + ${movie.title}"></h1>
+<h5 th:text="'Duration: ' + ${movie.durationMinutes} + ' mins'"></h5>
+<h5 th:text="'Genre: ' + ${movie.genre}"></h5>
+
+<div class="container">
+    <!-- Showtime Cards -->
+        <div class="list-section">
+            <h2>Available Showtimes</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Start Time</th>
+                        <th>Base Price</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="showtime : ${showtimes}">
+                        <td th:text="${#temporals.format(showtime.startTime, 'E, dd MMM yyyy HH:mm')}"></td>
+                        <td th:text="${showtime.ticketPrice}"></td>
+                        <td>
+                            <a th:href="@{/booking/{movieId}(movieId=${movie.movieId}, showtimeId=${showtime.showTimeId})}">
+                                View Seats
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    <!-- Seat Selection -->
+    <div class="map-section">
+        <h2>Select Seats</h2>
+        <form th:action="@{/booking/{movieId}(movieId=${movie.movieId}, showtimeId=${selectedShowtime.showTimeId})}" method="post" th:if="${seats}">
+            <div>
+                <label th:text="'Start time: ' + ${#temporals.format(selectedShowtime.startTime, 'E, dd MMM yyyy HH:mm')}"></label>
+            </div>
+
+            <div class="seat-map">
+                <div th:each="seat : ${seats}"
+                     th:id="'seat-' + ${seat.seatId}"
+                     th:class="'seat ' +
+                               (${seatBookingStatus[seat.seatId]} ? 'booked' : 'available') +
+                               ' ' + ${seat.seatType.toString().toLowerCase()}"
+                     th:style="'grid-row: ' + (${seat.row + 1}) + '; grid-column: ' + (${seat.column + 1}) + ';'">
+                    <label th:if="!${seatBookingStatus[seat.seatId]}">
+                        <span th:text="${seat.seatName}"></span>
+                        <input type="checkbox" name="ticketIds" th:value="${seatTicketMap[seat.seatId]}" hidden />
+                    </label>
+                    <span th:if="${seatBookingStatus[seat.seatId]}" th:text="${seat.seatName}"></span>
+                </div>
+            </div>
+
+            <!-- Booking Summary -->
+            <div class="summary" style="text-align: center">
+                <button type="submit">Book Seats</button>
+
+                <span>Total: <span id="total-price">0.00</span></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Message -->
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const ticketPrices = /*[[${ticketPriceMap}]]*/ {};
+    /*]]>*/
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const totalPriceDisplay = document.getElementById("total-price");
+
+        function updateTotalPrice() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            let total = 0;
+            checked.forEach(cb => {
+                const seatId = cb.closest('.seat').id.split('-')[1];
+                const price = ticketPrices[seatId];
+                if (price) total += price;
+            });
+            totalPriceDisplay.textContent = total.toFixed(2);
+        }
+
+        document.querySelectorAll('.seat.available').forEach(seat => {
+            seat.addEventListener('click', function () {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                if (checkbox && !this.classList.contains('booked')) {
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected', checkbox.checked);
+                    updateTotalPrice();
+                }
+            });
+        });
+
+        const bookingForm = document.querySelector('form');
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', function (e) {
+                const checkedSeats = bookingForm.querySelectorAll('input[type="checkbox"]:checked');
+                if (checkedSeats.length === 0) {
+                    alert("Please select at least one seat before booking.");
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!confirm("Are you sure you want to book the selected seat(s)?")) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        const toast = document.getElementById("toast");
+        if (toast) {
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+    });
+</script>
+
+</body>
+</html>

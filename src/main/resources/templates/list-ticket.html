@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tickets</title>
+  <link rel="stylesheet" th:href="@{/common.css}" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/movie/list}" class="nav-link">Movie List</a>
+  <a th:href="@{/booking/my-ticket}" class="nav-link" th:if="${mode == 'customer'}">My Tickets</a>
+  <a th:href="@{/room/list}" class="nav-link" th:if="${mode == 'admin'}">Room List</a>
+
+  <a th:href="@{/landing/logout}" style="margin-left: auto;" class="nav-link">Logout</a>
+</nav>
+
+<div class="container">
+  <h2>My Tickets</h2>
+  <form method="post" th:action="@{/booking/cancel}">
+    <table>
+      <thead>
+      <tr>
+        <th>Select</th>
+        <th>Seat</th>
+        <th>Room</th>
+        <th>Movie</th>
+        <th>Price</th>
+        <th>Start Time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="ticket : ${tickets}">
+        <td><input type="checkbox" name="ticketIds" th:value="${ticket.ticketId}" /></td>
+        <td th:text="${ticket.seat.seatName}"></td>
+        <td th:text="${roomMap[ticket.showTime.roomId]}"></td>
+        <td th:text="${movieMap[ticket.showTime.movieId]}"></td>
+        <td th:text="${ticket.ticketPrice}"></td>
+        <td th:text="${#temporals.format(ticket.showTime.startTime, 'E, dd/MM/yyyy HH:mm')}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+      <button type="submit">Cancel Selected Tickets</button>
+    </div>
+  </form>
+</div>
+
+<!-- Toast Message -->
+<div id="toast" class="toast" th:if="${message}" th:text="${message}"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const bookingForm = document.querySelector('form');
+      if (bookingForm) {
+          bookingForm.addEventListener('submit', function (e) {
+              const checkedSeats = bookingForm.querySelectorAll('input[type="checkbox"]:checked');
+              if (checkedSeats.length === 0) {
+                  alert("Please select at least one seat before canceling.");
+                  e.preventDefault();
+                  return;
+              }
+
+              if (!confirm("Are you sure you want to cancel the selected seat(s)?")) {
+                  e.preventDefault();
+              }
+          });
+      }
+
+      const toast = document.getElementById("toast");
+      if (toast) {
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+  });
+</script>
+
+</body>
+</html>
